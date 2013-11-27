@@ -22,13 +22,26 @@ public class Seguimiento extends javax.swing.JFrame {
      */
     String index;
     ArrayList<SeguimientoObject> misSeguimientos;
-    public Seguimiento(String x) {
-        this.index = x;
+    private static Seguimiento instance;
+	
+
+    public Seguimiento(String param){
+        this.index = param;
         initComponents();
         this.setVisible(true);
         this.setLocationRelativeTo(null);
         misSeguimientos = new ArrayList<SeguimientoObject>();
+    }
+    
+    public static synchronized Seguimiento getSeguimiento(String x) {
         
+        if (instance == null)
+			instance = new Seguimiento(x);
+
+		return instance;
+        
+//        
+
     }
 
     /**
@@ -140,33 +153,31 @@ public class Seguimiento extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 
-        String descrip=jTextArea1.getText();
+        String descrip = jTextArea1.getText();
         int horas = 0;
         try {
-            horas=Integer.parseInt(jTextField1.getText());
+            horas = Integer.parseInt(jTextField1.getText());
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Por favor solo numeros");
         }
-        
+
         SeguimientoObject seg = new SeguimientoObject(index, horas, descrip);
         misSeguimientos.add(seg);
         JOptionPane.showMessageDialog(null, "Seguimiento Guardado con exito");
         this.guardar();
-        
+
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        Principal princi  = new Principal(2);
+        Principal princi = new Principal(2);
         this.setVisible(false);
-        
-    }//GEN-LAST:event_jButton2ActionPerformed
 
+    }//GEN-LAST:event_jButton2ActionPerformed
     /**
      * @param args the command line arguments
      */
-    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
@@ -179,31 +190,33 @@ public class Seguimiento extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 
-private void guardar(){
-    try {
- 
-        
-        
-			String content = "This is the content to write into file";
- 
-			File file = new File("/Users/Light/datosparcial.txt");
- 
-			// if file doesnt exists, then create it
-			if (!file.exists()) {
-				file.createNewFile();  
-			}
- 
-			FileWriter fw = new FileWriter(file.getAbsoluteFile());
-			BufferedWriter bw = new BufferedWriter(fw);
-			bw.write(content);
-			bw.close();
- 
-			System.out.println("Done");
- 
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-}
+    private void guardar() {
+        try {
 
-}
+            String writing = "";
 
+            for (SeguimientoObject i : misSeguimientos) {
+                System.out.println(i);
+                writing = writing+","+i;
+            }
+          
+
+            File file = new File("/Users/Light/datosparcial.txt");
+
+            // if file doesnt exists, then create it
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+
+            FileWriter fw = new FileWriter(file.getAbsoluteFile());
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write(writing);
+            bw.close();
+
+            System.out.println("Done");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
