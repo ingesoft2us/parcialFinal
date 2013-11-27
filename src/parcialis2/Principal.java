@@ -21,15 +21,21 @@ public class Principal
     
     public static void main(String args[])
     {
-        new Principal();
+        new Principal(1);
     }
     
    
-    public Principal()
+    public Principal(int n)
     {
     
-        proyectos = new HashMap();        
-        this.Proxy();
+        proyectos = new HashMap();  
+        if (n==1) {
+            this.Proxy();
+        } else {
+            this.menu();
+        }
+              
+        
         //this.menu();
         
       
@@ -59,7 +65,7 @@ public class Principal
 
         else
         {
-            JOptionPane.showMessageDialog(null, "Meta bien la clave idiota de mierda");
+            JOptionPane.showMessageDialog(null, "Mal, muy mal");
             this.Proxy();
             System.out.println("Usted no tiene acceso a la modificación de actividades");
         } 
@@ -67,9 +73,24 @@ public class Principal
     }
   
     
+    private void validarActividad(){
+        
+        String indx=JOptionPane.showInputDialog(null,"Ingrese el indice de la Actividad a la cual quiere meter un seguimiento.");
+       
+        if(proyectos.containsKey("NombreActividad "+indx))
+        {
+            Seguimiento seg = new Seguimiento(indx);
+        
+        }
+        else{
+            JOptionPane.showMessageDialog(null, "Index no encontrado");
+        }
+        
+    }
+    
     public void menu()
      {
-       char op;
+       char op; 
          
        do {
            
@@ -77,7 +98,9 @@ public class Principal
                     "1. Adicionar \n" +
                     "2. Modificar \n" +
                     "3. Eliminar \n" +
-                    "4. Reportar \n" +
+                    "4. Reportar \n"
+                    + "5. Seguimiento"
+                    + " \n" +
                     "0. Salir");
             
            op=opcion.charAt(0);
@@ -95,7 +118,10 @@ public class Principal
                     break; 
                 case '4':
                    reporte=new Reporte(proyectos,i);
-                    break; 
+                    break;
+                    case '5':
+                   this.validarActividad();
+                    break;
                 case '0':
                     System.exit(1);
                     break;
